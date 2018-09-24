@@ -21,6 +21,15 @@ function BroadcastStyle(::DArrayStyle{AStyle}, ::DArrayStyle{BStyle}) where {ASt
     DArrayStyle(BroadcastStyle(AStyle, BStyle))
 end
 
+function Broadcast.broadcasted(::DArrayStyle{Style}, f, args...)
+    inner = Broadcast.broadcasted(Style(), f, args...)
+    if inner <: Broadcasted
+        return Broadcasted{DArrayStyle{Style}}(inner.f, inner.args, inner.axes)
+    else # eagerly evaluated
+        return inner
+    end
+end
+
 # # deal with one layer deep lazy arrays
 # BroadcastStyle(::Type{<:LinearAlgebra.Transpose{<:Any,T}}) where T <: DArray = BroadcastStyle(T)
 # BroadcastStyle(::Type{<:LinearAlgebra.Adjoint{<:Any,T}}) where T <: DArray = BroadcastStyle(T)
