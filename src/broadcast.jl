@@ -16,8 +16,9 @@ DArrayStyle(::Val{N}) where N = DArrayStyle{Broadcast.DefaultArrayStyle{N}}()
 BroadcastStyle(::Type{<:DArray{<:Any, N, A}}) where {N, A} = DArrayStyle(BroadcastStyle(A), Val(N))
 
 # promotion rules
+# TODO: test this
 function BroadcastStyle(::DArrayStyle{AStyle}, ::DArrayStyle{BStyle}) where {AStyle, BStyle}
-    DArrayStyle{BroadcastStyle(AStyle, BStyle)}()
+    DArrayStyle(BroadcastStyle(AStyle, BStyle))
 end
 
 # # deal with one layer deep lazy arrays
