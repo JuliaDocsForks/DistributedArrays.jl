@@ -85,6 +85,10 @@ end
     return dest
 end
 
+# Test
+# a = Array
+# a .= DArray(x,y)
+
 @inline function Base.copy(bc::Broadcasted{<:DArrayStyle})
     dbc = bcdistribute(bc)
     # TODO: teach DArray about axes since this is wrong for OffsetArrays
